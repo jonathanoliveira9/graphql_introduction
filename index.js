@@ -33,6 +33,8 @@ const typeDefs = gql`
   type Query {
     users: [User]
     products: [Product]
+    user(id: Int, name: String): User
+    product(id: Int, name: String, price: Float): Product
   }
 `
 
@@ -41,8 +43,20 @@ const resolvers = {
     users() {
       return users;
     },
+    user(_, args) {
+      const { id, name } = args;
+      if(id) return users.find((user) => user.id == args.id)
+      return users.find((user) => user.name == args.name)
+    },
     products(){
       return products;
+    },
+    product(_, args) {
+      const { id, name, price } = args;
+      if(id) return products.find((product) => product.id == args.id)
+      if(name) return products.find((product) => product.name == args.name) 
+      return products.find((product) => product.price == args.price) 
+
     }
   }
 };
