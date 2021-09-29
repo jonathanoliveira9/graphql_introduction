@@ -15,6 +15,7 @@ const typeDefs = gql`
     nome: String
     ativo: Boolean
     id: ID
+    tecnologias: [String!]!
   }
 `
 
@@ -27,13 +28,16 @@ const resolvers = {
       return 5000.0
     },
     nome(){
-      return "GRAPHQL"
+      return "Graphql"
     },
     ativo(){
       return true
     },
     id(){
       return 11321312321;
+    },
+    tecnologias(){
+      return ['Backdoor']
     }
   }
 };
