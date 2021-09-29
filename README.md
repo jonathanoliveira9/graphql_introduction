@@ -4,3 +4,7 @@
 ```bash
 $ npm start
 ```
+### Web
+```bash
+http://localhost:4000/
+```
