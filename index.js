@@ -7,58 +7,50 @@ const { gql, ApolloServer } = require( "apollo-server" )
  * - Boolean
  * - ID
 */
-const products = [
-  { id: 1, name: 'P', price: 12.0 },
-  { id: 2, name: 'S', price: 0.0 }
+const db = [
+  { id: 1, name: 'Paulo', email: 'paulo@test.com', phone01: '11 6265-4545', perfil: 1 },
+  { id: 2, name: 'Jonathan', email: 'jonathan@test.com', phone01: '55 6265-4545', perfil: 2 }
 ]
 
-const users = [
-  { id: 1, name: 'No', active: true, age: 1 },
-  { id: 2, name: 'Noa', active: true, age: 2 }
+const perfis = [
+  { id: 1, description: 'ADM' },
+  { id: 2, description: 'NORMAL' }
 ]
+
 const typeDefs = gql`
-  type Product {
-    id: ID
+  type User {
+    id: Int
     name: String
-    price: Float
+    email: String
+    phone: String
+    perfil: Perfil
   }
 
-  type User {
-    age: Int
-    name: String
-    active: Boolean
-    id: ID
+  type Perfil {
+    id: Int
+    description: String
   }
 
   type Query {
-    users: [User]
-    products: [Product]
-    user(id: Int, name: String): User
-    product(id: Int, name: String, price: Float): Product
+    user(id: Int): User
+    perfis: [Perfil]
   }
-`
+`;
 
 const resolvers = {
+  User: {
+    perfil(user){
+      return perfis.find((p) => p.id === user.perfil);
+    },
+  },
   Query: {
-    users() {
-      return users;
+    user(obj, args) {
+      return db.find((db) => db.id === args.id);
     },
-    user(_, args) {
-      const { id, name } = args;
-      if(id) return users.find((user) => user.id == args.id)
-      return users.find((user) => user.name == args.name)
+    perfis() {
+      return perfis;
     },
-    products(){
-      return products;
-    },
-    product(_, args) {
-      const { id, name, price } = args;
-      if(id) return products.find((product) => product.id == args.id)
-      if(name) return products.find((product) => product.name == args.name) 
-      return products.find((product) => product.price == args.price) 
-
-    }
-  }
+  },
 };
 
 const server = new ApolloServer({
